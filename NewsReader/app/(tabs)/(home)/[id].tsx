@@ -1,10 +1,9 @@
-// app/(tabs)/(home)/[id].tsx
-
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { useEffect } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, Text, View, Pressable } from "react-native";
 import { ARTICLES } from "../../../data/articles";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
 type ArticleParams = { id: string };
 
@@ -16,20 +15,32 @@ const CATEGORY_COLOURS: Record<string, { bg: string; text: string }> = {
     AI: { bg: "#E1F5EE", text: "#0F6E56" },
     Business: { bg: "#FEFCE8", text: "#854D0E" },
 };
+
 const DEFAULT_COLOUR = { bg: "#F1F5F9", text: "#475569" };
 
 export default function ArticleDetail() {
     const { id } = useLocalSearchParams<ArticleParams>();
     const navigation = useNavigation();
+    const [bookmarked, setBookmarked] = useState<boolean>(false);
 
     const article = ARTICLES.find((a) => a.id === id);
 
-    // Update the Stack header title once we have the article
     useEffect(() => {
         if (article) {
-              navigation.setOptions({ title: article.title });
+            navigation.setOptions({
+                title: article.title,
+                headerRight: () => (
+                    <Pressable onPress={() => setBookmarked((prev) => !prev)} style={{ marginRight: 8 }}>
+                        <Ionicons
+                            name={bookmarked ? "bookmark" : "bookmark-outline"}
+                            size={22}
+                            color="#FFFFFF"
+                        />
+                    </Pressable>
+                ),
+            });
         }
-    }, [article]);
+    }, [article, bookmarked]);
 
     if (!article) {
         return (
