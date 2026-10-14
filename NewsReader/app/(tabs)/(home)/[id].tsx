@@ -27,20 +27,9 @@ export default function ArticleDetail() {
 
     useEffect(() => {
         if (article) {
-            navigation.setOptions({
-                title: article.title,
-                headerRight: () => (
-                    <Pressable onPress={() => setBookmarked((prev) => !prev)} style={{ marginRight: 8 }}>
-                        <Ionicons
-                            name={bookmarked ? "bookmark" : "bookmark-outline"}
-                            size={22}
-                            color="#FFFFFF"
-                        />
-                    </Pressable>
-                ),
-            });
+            navigation.setOptions({ title: article.title });
         }
-    }, [article, bookmarked]);
+    }, [article]);
 
     if (!article) {
         return (
@@ -70,13 +59,23 @@ export default function ArticleDetail() {
                     </Text>
                 ))}
             </ScrollView>
+            <Pressable
+                style={styles.floatingButton}
+                onPress={() => setBookmarked((prev) => !prev)}
+            >
+                <Ionicons
+                    name={bookmarked ? "bookmark" : "bookmark-outline"}
+                    size={24}
+                    color="#FFFFFF"
+                />
+            </Pressable>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    screen: { flex: 1, backgroundColor: "#FFFFFF" },
-    content: { padding: 20, paddingBottom: 48 },
+    screen: { flex: 1, backgroundColor: "#FFFFFF", position: "relative" },
+    content: { padding: 20, paddingBottom: 80 },
     badge: { alignSelf: "flex-start", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 20, marginBottom: 14 },
     badgeText: { fontSize: 12, fontWeight: "600" },
     title: { fontSize: 22, fontWeight: "800", color: "#0D1F4E", lineHeight: 30, marginBottom: 12 },
@@ -86,4 +85,20 @@ const styles = StyleSheet.create({
     divider: { height: 1, backgroundColor: "#F1F5F9", marginBottom: 20 },
     body: { fontSize: 15, color: "#334155", lineHeight: 24, marginBottom: 16 },
     notFound: { padding: 40, textAlign: "center", color: "#94A3B8" },
+    floatingButton: {
+        position: "absolute",
+        right: 24,
+        bottom: 24,
+        width: 56,
+        height: 56,
+        borderRadius: 28,
+        backgroundColor: "#0D1F4E",
+        justifyContent: "center",
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4.65,
+        elevation: 8,
+    },
 });
